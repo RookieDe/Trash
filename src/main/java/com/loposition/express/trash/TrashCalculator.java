@@ -96,7 +96,7 @@ public class TrashCalculator {
           checkIncludeIn();
           BaseTrashToken expectToken = nextToken();
           if (expectToken instanceof StringTrashToken) {
-            includeiInString((StringTrashToken) expectToken);
+            includeInString((StringTrashToken) expectToken);
           } else {
             throw new IncludeCannotUseException("must be String");
           }
@@ -210,7 +210,7 @@ public class TrashCalculator {
     TrashObject peek = tokens.peek();
 
     if (peek instanceof TrashList) {
-      includeiInString(expectToken);
+      includeInString(expectToken);
     } else {
       tokens.pop();
       tokens.push(new TrashBoolean(
@@ -265,7 +265,7 @@ public class TrashCalculator {
   /**
    * include in String
    */
-  private void includeiInString(StringTrashToken stringTrashToken) {
+  private void includeInString(StringTrashToken stringTrashToken) {
     TrashList<TrashObject> pop = (TrashList<TrashObject>) tokens.pop();
     List<TrashObject> trashObjects = pop.getContent();
     boolean flag = false;

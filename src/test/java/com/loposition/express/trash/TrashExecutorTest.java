@@ -3,6 +3,7 @@ package com.loposition.express.trash;
 import static org.junit.Assert.*;
 
 import com.loposition.express.trash.context.VarContextHolder;
+import com.loposition.express.trash.item.SubItem;
 import com.loposition.express.trash.item.TestItem;
 
 import org.junit.Test;
@@ -35,5 +36,21 @@ public class TrashExecutorTest {
 
     System.out.println(pass);
   }
+
+  @Test
+  public void testAnnotation(){
+    SubItem what = new SubItem("hell3");
+    TestItem hello = new TestItem("hello",20L,what);
+    ArrayList<String> strings = new ArrayList<String>();
+    strings.add("hello");
+    strings.add("hello1");
+    strings.add("hello2");
+    VarContextHolder.add("go",strings);
+    String expression = " '$go' in testItem:item:name ";
+
+    Boolean pass = TrashExecutor.pass(expression, hello);
+    System.out.println(pass);
+  }
+
 
 }

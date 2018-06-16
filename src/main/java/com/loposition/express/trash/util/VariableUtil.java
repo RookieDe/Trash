@@ -1,11 +1,13 @@
-package com.loposition.express.trash.expression;
+package com.loposition.express.trash.util;
 
+import com.loposition.express.trash.annotation.TrashField;
 import com.loposition.express.trash.exception.VariableNotFoundException;
 import com.loposition.express.trash.token.BaseTrashToken;
 import com.loposition.express.trash.token.LongTrashToken;
 import com.loposition.express.trash.token.StringTrashToken;
 import com.loposition.express.trash.token.VariableTrashToken;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -18,7 +20,7 @@ import java.util.regex.Pattern;
  */
 public class VariableUtil {
 
-  public static BaseTrashToken getVirable(Map<String, Object> env,
+  public static BaseTrashToken getVariable(Map<String, Object> env,
       VariableTrashToken variableTrashToken)
       throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
     String content = variableTrashToken.getContent();
@@ -27,21 +29,71 @@ public class VariableUtil {
     if (variable == null) {
       throw new VariableNotFoundException(varNames[0]);
     }
-    for (int i = 1; i < varNames.length; i++) {
-      Class<?> clazz = variable.getClass();
-      Method method = clazz.getMethod(getVarMethodName(varNames[i]));
-      if(method == null){
-
-      }
-      variable = method.invoke(variable);
-    }
+    variable = getVariable(varNames,variable);
     if (variable instanceof Long ||
-        variable instanceof Integer){
+        variable instanceof Integer) {
       return new LongTrashToken(Long.parseLong(variable.toString()));
     }
-    return new StringTrashToken((String)variable);
+    return new StringTrashToken((String) variable);
   }
 
+
+  private static Object getVariable(String[] names, Object object)
+      throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    Object ret = object;
+    for (int i = 1; i < names.length; i++) {
+      Field[] declaredFields = ret.getClass().getDeclaredFields();
+      Object tempRet;
+      //先从注解获取名字
+      tempRet = getValueByAnnotation(declaredFields, names[i], ret);
+      //再从方法获取名字
+      if (tempRet == null) {
+        try {
+          tempRet = getValueByMethod(ret, names[i]);
+        }catch (NoSuchMethodException e){
+          throw new VariableNotFoundException(names[i]);
+        }
+      }
+      if (tempRet == null) {
+        throw new VariableNotFoundException(names[i]);
+      } else {
+        ret = tempRet;
+      }
+    }
+    return ret;
+  }
+
+  private static Object getValueByAnnotation(Field[] fields, String name, Object object)
+      throws IllegalAccessException {
+    Integer fieldNum = 0;
+    Object ret = null;
+    for (Field field : fields) {
+      TrashField annotation = field.getAnnotation(TrashField.class);
+      if (annotation != null) {
+        if (annotation.name().equals(name)) {
+          fieldNum++;
+          field.setAccessible(true);
+          ret = field.get(object);
+        }
+      }
+    }
+    if (fieldNum > 1) {
+      throw new VariableNotFoundException("duplicate TrashField " + name);
+    }
+    return ret;
+  }
+
+
+  private static Object getValueByMethod(Object object, String name)
+      throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    Class<?> clazz = object.getClass();
+    Method method = clazz.getMethod(getVarMethodName(name));
+    if (method == null) {
+      return null;
+    }
+    return method.invoke(object);
+
+  }
 
   public static String getVarMethodName(String varName) {
     StringBuilder stringBuilder = new StringBuilder();

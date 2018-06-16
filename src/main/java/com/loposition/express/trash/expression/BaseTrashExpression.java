@@ -3,12 +3,12 @@ package com.loposition.express.trash.expression;
 import com.loposition.express.trash.lexer.ExpressionLexer;
 import com.loposition.express.trash.token.BaseTrashToken;
 import com.loposition.express.trash.token.VariableTrashToken;
+import com.loposition.express.trash.util.VariableUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 /**
  * @author huahua
@@ -38,7 +38,7 @@ public class BaseTrashExpression {
     do{
       baseTrashToken = expressionLexer.scan();
       if (baseTrashToken instanceof VariableTrashToken){
-        baseTrashToken = VariableUtil.getVirable(env,(VariableTrashToken)baseTrashToken);
+        baseTrashToken = VariableUtil.getVariable(env,(VariableTrashToken)baseTrashToken);
       }
       baseTrashTokens.add(baseTrashToken);
     }while (baseTrashToken != null);
