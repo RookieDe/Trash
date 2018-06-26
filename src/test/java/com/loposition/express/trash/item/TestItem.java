@@ -15,7 +15,7 @@ public class TestItem {
 
   private Long id;
 
-  @TrashField(name = "item")
+  @TrashField("item")
   private SubItem subItem;
 
   public TestItem(String content ,Long id) {

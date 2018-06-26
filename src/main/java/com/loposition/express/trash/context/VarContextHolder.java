@@ -18,4 +18,8 @@ public class VarContextHolder {
   public static Object get(String key){
     return HOLDER.get(key);
   }
+
+  public static void removeAll(){HOLDER.clear();}
+
+  public static void add(Map<String,Object> words){HOLDER.putAll(words);}
 }

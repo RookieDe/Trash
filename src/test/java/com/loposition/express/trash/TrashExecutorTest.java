@@ -39,7 +39,7 @@ public class TrashExecutorTest {
 
   @Test
   public void testAnnotation(){
-    SubItem what = new SubItem("hell3");
+    SubItem what = new SubItem("hello");
     TestItem hello = new TestItem("hello",20L,what);
     ArrayList<String> strings = new ArrayList<String>();
     strings.add("hello");
@@ -47,7 +47,6 @@ public class TrashExecutorTest {
     strings.add("hello2");
     VarContextHolder.add("go",strings);
     String expression = " '$go' in testItem:item:name ";
-
     Boolean pass = TrashExecutor.pass(expression, hello);
     System.out.println(pass);
   }

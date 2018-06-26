@@ -1,6 +1,8 @@
 com/loposition/express/trash/object/TrashLong.class
 com/loposition/express/trash/token/DoubleTrashToken.class
 com/loposition/express/trash/context/VarContextHolder.class
+com/loposition/express/trash/annotation/TrashField.class
+com/loposition/express/trash/util/VariableUtil.class
 com/loposition/express/trash/TrashCalculator.class
 com/loposition/express/trash/object/TrashDouble.class
 com/loposition/express/trash/token/LongTrashToken.class
@@ -12,7 +14,8 @@ com/loposition/express/trash/token/VariableTrashToken.class
 com/loposition/express/trash/token/KeyWordTrashToken.class
 com/loposition/express/trash/token/OperatorTrashType.class
 com/loposition/express/trash/TrashExecutor.class
-com/loposition/express/trash/expression/VariableUtil.class
+com/loposition/express/trash/util/ObjectNameUtil.class
+com/loposition/express/trash/annotation/TrashObject.class
 com/loposition/express/trash/token/BaseTrashToken.class
 com/loposition/express/trash/token/KeywordTrashType.class
 com/loposition/express/trash/exception/StringParseException.class

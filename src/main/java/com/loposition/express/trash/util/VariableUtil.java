@@ -70,10 +70,12 @@ public class VariableUtil {
     for (Field field : fields) {
       TrashField annotation = field.getAnnotation(TrashField.class);
       if (annotation != null) {
-        if (annotation.name().equals(name)) {
-          fieldNum++;
-          field.setAccessible(true);
-          ret = field.get(object);
+        for (String aliasName:annotation.value()){
+          if (aliasName.equals(name)) {
+            fieldNum++;
+            field.setAccessible(true);
+            ret = field.get(object);
+          }
         }
       }
     }
